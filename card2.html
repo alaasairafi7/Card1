@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8">
+     
+    <style>
+      @font-face {
+        font-family: myFirstFont;
+        src: url(font2.ttf);
+      }
+      
+      body, input {
+        font-family: myFirstFont;
+      }
+      
+      .button {
+        background-color: #C2b49d; 
+        border: none;
+        color: white;
+        text-align: center;
+        display: inline-block;
+        font-size: 20px;
+        padding: 14px 40px;
+        font-family: myFirstFont;
+      }
+  
+      input[type=text] {
+        border: 2px solid #C2b49d;
+        border-radius: 4px;
+        width:400px;
+        height:40px;
+      }
+      
+      .name{
+        margin-top: 99;
+      }
+      
+      .container{    
+         background-color:#f2f0eb;   
+      }
+  
+    </style>
+    
+    <title>النقابة العامة للسيارات</title>
+    <meta charset="UTF-8">
+  </head>
+  
+  <body align=center>
+    <div class="container">
+      <form>
+        <img src="logo2.png" alt="naqhaba" width="450" height="150"><br>
+        <h2>نهنئكم بمناسبة السنة الهجرية الجديدة ويسعدنا أن نُشارككم بهجتكم بتصميم خاص بكم</h2>
+        <h3>كل عام وأنتم بخير</h3>
+    
+        <h4>اكتب اسمك</h4>
+        <input class="input-text" type="text" name="name" oninput="updatePreview()"><br><br>
+  
+        <input class="button" type="button" value="معاينة التصميم" onclick="updatePreview()">
+        <input class="button" type="submit" value="تحميل التصميم"><br><br>
+        <img id="pre" style="width: 60%;">
+        <p id="nameDisplay"></p>
+      </form>
+      
+      <h4 style="background-color:#C2b49d;">الاتصال الداخلي © النقابة العامة للسيارات</h4>
+    </div>
+    
+    <script>
+      function downloadImage() {
+        // Get the image element
+        var img = document.getElementById('pre');
+        
+        // Create a link element
+        var link = document.createElement('a');
+        link.href = img.src;
+        link.download = 'myimage.png'; // Specify the filename here
+        
+        // Append the link element to the document
+        document.body.appendChild(link);
+        
+        // Trigger a click on the link element
+        link.click();
+        
+        // Remove the link element from the document
+        document.body.removeChild(link);
+        
+        // Reset the form
+        document.querySelector('form').reset();
+        img.src = 'story0-السنة_الهجرية-1445.png';
+      }
+      
+      // Add event listener to the form submit button
+      var form = document.querySelector('form');
+      var submitButton = form.querySelector('[type="submit"]');
+      submitButton.addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent form submission
+        
+        // Trigger image download
+        downloadImage();
+      });
+      
+      function updatePreview() {
+        var nameInput = document.querySelector('[name=name]');
+        var previewImage = document.getElementById('pre');
+        var name = nameInput.value.trim();
+        
+        if (name) {
+          // Create a new Image object with the user's name in the URL
+          var img = new Image();
+          img.onload = function() {
+            // Create a canvas element and draw the image on it
+            var canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+    
+            // Add the user's name to the canvas
+            var ctx = canvas.getContext('2d');
+            ctx.font = '55px myFirstFont';
+            ctx.fillStyle = '#white';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(name, canvas.width/2+250, canvas.height/2 + 400); 
+    
+            // Use the canvas as the preview image
+            previewImage.src= canvas.toDataURL();
+    
+            // Update the name display with the user's name
+            document.getElementById('nameDisplay').textContent = name;
+          };
+          img.src = 'story0-السنة_الهجرية-1445.png?name=' + encodeURIComponent(name);
+        } else {
+          previewImage.src = '';
+          document.getElementById('nameDisplay').textContent = '';
+        }
+      }
+    </script>
+  </body>
+</html>
